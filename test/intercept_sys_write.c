@@ -75,5 +75,5 @@ hook(long syscall_number,
 static __attribute__((constructor)) void
 init(void)
 {
-	intercept_hook_point = hook;
+	(void)hook;
 }

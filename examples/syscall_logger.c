@@ -855,5 +855,5 @@ start(void)
 	if (log_fd < 0)
 		syscall_no_intercept(SYS_exit_group, 4);
 
-	intercept_hook_point = &hook;
+	(void)&hook;
 }

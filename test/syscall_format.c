@@ -214,7 +214,7 @@ main(int argc, char **argv)
 	if (argc < 2)
 		return EXIT_FAILURE;
 
-	intercept_hook_point = hook;
+	(void)hook;
 
 	/*
 	 * The two input buffers contain null terminated strings, with

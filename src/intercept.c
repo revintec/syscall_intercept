@@ -60,12 +60,7 @@
 #include "disasm_wrapper.h"
 #include "magic_syscalls.h"
 
-int (*intercept_hook_point)(long syscall_number,
-			long arg0, long arg1,
-			long arg2, long arg3,
-			long arg4, long arg5,
-			long *result)
-	__attribute__((visibility("default")));
+int(*intercept_hook_point)(long*ret,syscall_desc*desc)__attribute__((visibility("default")));
 
 void (*intercept_hook_point_clone_child)(void)
 	__attribute__((visibility("default")));
@@ -647,15 +642,7 @@ intercept_routine(struct context *context)
 
 	intercept_log_syscall(patch, &desc, UNKNOWN, 0);
 
-	if (intercept_hook_point != NULL)
-		forward_to_kernel = intercept_hook_point(desc.nr,
-		    desc.args[0],
-		    desc.args[1],
-		    desc.args[2],
-		    desc.args[3],
-		    desc.args[4],
-		    desc.args[5],
-		    &result);
+	if(intercept_hook_point)forward_to_kernel=intercept_hook_point(&result,(syscall_desc*)&desc);
 
 	if (desc.nr == SYS_vfork || desc.nr == SYS_rt_sigreturn) {
 		/* can't handle these syscalls the normal way */

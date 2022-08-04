@@ -106,7 +106,7 @@ hook_wrapper(long syscall_number,
 static __attribute__((constructor)) void
 init(void)
 {
-	intercept_hook_point = hook_wrapper;
+	(void)hook_wrapper;
 }
 
 static __attribute__((destructor)) void

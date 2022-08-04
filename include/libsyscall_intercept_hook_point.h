@@ -51,11 +51,8 @@
 extern "C" {
 #endif
 
-extern int (*intercept_hook_point)(long syscall_number,
-			long arg0, long arg1,
-			long arg2, long arg3,
-			long arg4, long arg5,
-			long *result);
+typedef struct{int nr;long args[6];}syscall_desc;
+extern int(*intercept_hook_point)(long*ret,syscall_desc*desc);
 
 extern void (*intercept_hook_point_clone_child)(void);
 extern void (*intercept_hook_point_clone_parent)(long pid);

@@ -152,5 +152,5 @@ start(void)
 	if (e != NULL)
 		fork_counter_max = atoi(e);
 
-	intercept_hook_point = &hook;
+	(void)&hook;
 }

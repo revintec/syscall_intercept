@@ -175,7 +175,7 @@ if(PERFORM_STYLE_CHECKS)
 			COMMAND ${PERL_EXECUTABLE} ${PROJECT_SOURCE_DIR}/utils/check_whitespace.pl
 			-r ${PROJECT_SOURCE_DIR}/src)
 
-		add_dependencies(syscall_intercept_base_c cstyle check_whitespace)
+		add_dependencies(syscall_intercept_base_c check_whitespace)
 	else()
 		message(FATAL_ERROR
 			"Perl not found. Perl is required for checking coding style. "

@@ -67,7 +67,7 @@ hook(long syscall_number,
 int
 main()
 {
-	intercept_hook_point = hook;
+	(void)hook;
 
 	if (syscall_hook_in_process_allowed())
 		puts("allowed");

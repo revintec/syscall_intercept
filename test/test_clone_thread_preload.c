@@ -107,6 +107,6 @@ hook_child(void)
 static __attribute__((constructor)) void
 init(void)
 {
-	intercept_hook_point = hook;
+	(void)hook;
 	intercept_hook_point_clone_child = hook_child;
 }

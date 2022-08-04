@@ -41,11 +41,7 @@
 
 #include "libsyscall_intercept_hook_point.h"
 
-int (*intercept_hook_point)(long syscall_number,
-			long arg0, long arg1,
-			long arg2, long arg3,
-			long arg4, long arg5,
-			long *result);
+int(*intercept_hook_point)(long*ret,syscall_desc*desc);
 
 long
 syscall_no_intercept(long syscall_number, ...)
