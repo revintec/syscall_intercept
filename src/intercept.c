@@ -466,36 +466,15 @@ mprotect_asm_wrappers(void)
  * might just get rid of the whole object file containing it, when linking
  * statically with libsyscall_intercept.
  */
-static __attribute__((constructor)) void
-intercept(int argc, char **argv)
-{
-	(void) argc;
-	cmdline = argv[0];
+void _syscall_intercept(bool all){
+    patch_all_objs=all;vdso_addr=(void*)(uintptr_t)getauxval(AT_SYSINFO_EHDR);
+    debug_dumps_on=getenv("INTERCEPT_DEBUG_DUMP")!=NULL;intercept_setup_log(getenv("INTERCEPT_LOG"),getenv("INTERCEPT_LOG_TRUNC"));
+    log_header();init_patcher();dl_iterate_phdr(analyze_object,NULL);if(!libc_found)xabort("libc not found");
 
-	if (!syscall_hook_in_process_allowed())
-		return;
-
-	vdso_addr = (void *)(uintptr_t)getauxval(AT_SYSINFO_EHDR);
-	debug_dumps_on = getenv("INTERCEPT_DEBUG_DUMP") != NULL;
-	patch_all_objs = (getenv("INTERCEPT_ALL_OBJS") != NULL);
-	intercept_setup_log(getenv("INTERCEPT_LOG"),
-			getenv("INTERCEPT_LOG_TRUNC"));
-	log_header();
-	init_patcher();
-
-	dl_iterate_phdr(analyze_object, NULL);
-	if (!libc_found)
-		xabort("libc not found");
-
-	for (unsigned i = 0; i < objs_count; ++i) {
-		if (objs[i].count > 0 && is_asm_wrapper_space_full())
-			xabort("not enough space in asm_wrapper_space");
-		allocate_trampoline_table(objs + i);
-		create_patch_wrappers(objs + i, &next_asm_wrapper_space);
-	}
-	mprotect_asm_wrappers();
-	for (unsigned i = 0; i < objs_count; ++i)
-		activate_patches(objs + i);
+    for (unsigned i=0;i<objs_count;++i){
+        if(objs[i].count&&is_asm_wrapper_space_full())xabort("not enough space in asm_wrapper_space");
+        allocate_trampoline_table(objs+i);create_patch_wrappers(objs+i,&next_asm_wrapper_space);
+    };mprotect_asm_wrappers();for(unsigned i=0;i<objs_count;++i)activate_patches(objs+i);
 }
 
 /*
