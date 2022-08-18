@@ -53,6 +53,7 @@ extern "C" {
 
 typedef struct{int nr;long args[6];}syscall_desc;
 extern int(*intercept_hook_point)(long*ret,syscall_desc*desc);
+void _syscall_intercept(int all);
 
 extern void (*intercept_hook_point_clone_child)(void);
 extern void (*intercept_hook_point_clone_parent)(long pid);
