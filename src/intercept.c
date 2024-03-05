@@ -466,7 +466,7 @@ mprotect_asm_wrappers(void)
  * might just get rid of the whole object file containing it, when linking
  * statically with libsyscall_intercept.
  */
-void _syscall_intercept(int all){
+__attribute__((visibility("default")))void _syscall_intercept(int all){
     patch_all_objs=all;vdso_addr=(void*)(uintptr_t)getauxval(AT_SYSINFO_EHDR);
     debug_dumps_on=getenv("INTERCEPT_DEBUG_DUMP")!=NULL;intercept_setup_log(getenv("INTERCEPT_LOG"),getenv("INTERCEPT_LOG_TRUNC"));
     log_header();init_patcher();dl_iterate_phdr(analyze_object,NULL);if(!libc_found)xabort("libc not found");
